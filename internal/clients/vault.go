@@ -31,6 +31,10 @@ import (
 )
 
 const (
+        // minimal config, NOT USED YET
+        keyAddress = "address"
+        keyToken   = "token"
+
 	// error messages
 	errNoProviderConfig     = "no providerConfigRef provided"
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
@@ -83,10 +87,10 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			fmt.Sprintf("%s=%s", "HASHICUPS_PASSWORD", vaultCreds["password"]),
 		}*/
 		// set credentials in Terraform provider configuration
-		/*ps.Configuration = map[string]interface{}{
-			"username": vaultCreds["username"],
-			"password": vaultCreds["password"],
-		}*/
+		ps.Configuration = map[string]interface{}{
+			"address": vaultCreds["address"],
+			"token": vaultCreds["token"],
+		}
 		return ps, nil
 	}
 }
