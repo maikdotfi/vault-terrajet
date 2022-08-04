@@ -22,7 +22,7 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/crossplane-contrib/provider-jet-vault/apis/null/v1alpha1"
+	v1alpha1 "github.com/crossplane-contrib/provider-jet-vault/apis/mount/v1alpha1"
 	v1alpha1apis "github.com/crossplane-contrib/provider-jet-vault/apis/v1alpha1"
 )
 

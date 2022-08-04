@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.vault.jet.crossplane.io
+  name: mounts.mount.vault.jet.crossplane.io
 spec:
-  group: null.vault.jet.crossplane.io
+  group: mount.vault.jet.crossplane.io
   names:
     categories:
     - crossplane
     - managed
     - vaultjet
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: Mount
+    listKind: MountList
+    plural: mounts
+    singular: mount
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API
+        description: Mount is the Schema for the Mounts API
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: MountSpec defines the desired state of Mount
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +63,59 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
+                  auditNonHmacRequestKeys:
+                    description: Specifies the list of keys that will not be HMAC'd
+                      by audit devices in the request data object.
+                    items:
+                      type: string
+                    type: array
+                  auditNonHmacResponseKeys:
+                    description: Specifies the list of keys that will not be HMAC'd
+                      by audit devices in the response data object.
+                    items:
+                      type: string
+                    type: array
+                  defaultLeaseTtlSeconds:
+                    description: Default lease duration for tokens and secrets in
+                      seconds
+                    type: number
+                  description:
+                    description: Human-friendly description of the mount
+                    type: string
+                  externalEntropyAccess:
+                    description: Enable the secrets engine to access Vault's external
+                      entropy source
+                    type: boolean
+                  local:
+                    description: Local mount flag that can be explicitly set to true
+                      to enforce local mount in HA environment
+                    type: boolean
+                  maxLeaseTtlSeconds:
+                    description: Maximum possible lease duration for tokens and secrets
+                      in seconds
+                    type: number
+                  namespace:
+                    description: Target namespace. (requires Enterprise)
+                    type: string
+                  options:
                     additionalProperties:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
+                    description: Specifies mount type specific options that are passed
+                      to the backend
                     type: object
+                  path:
+                    description: Where the secret backend will be mounted
+                    type: string
+                  sealWrap:
+                    description: Enable seal wrapping for the mount, causing values
+                      stored by the mount to be wrapped by the seal's encryption capability
+                    type: boolean
+                  type:
+                    description: Type of the backend, such as 'aws'
+                    type: string
+                required:
+                - path
+                - type
                 type: object
               providerConfigRef:
                 default:
@@ -168,10 +214,12 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: MountStatus defines the observed state of Mount.
             properties:
               atProvider:
                 properties:
+                  accessor:
+                    type: string
                   id:
                     type: string
                 type: object
